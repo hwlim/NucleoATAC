@@ -31,8 +31,8 @@ def _biasVplotHelper(arg):
     for chunk in chunks:
         try:
             chunk.center()
-            biastrack = InsertionBiasTrack(chunk.chrom, chunk.start - params.flank - 1 - (params.upper/2),
-                                                chunk.end + params.flank + params.upper/2+1)
+            biastrack = InsertionBiasTrack(chunk.chrom, chunk.start - params.flank - 1 - (params.upper//2),
+                                                chunk.end + params.flank + params.upper//2+1)
             if params.bg is not None:
                 biastrack.read_track(params.bg, empty = 0)
             else:
@@ -44,7 +44,7 @@ def _biasVplotHelper(arg):
             add = biasmat.get(start = chunk.start - params.flank, end = chunk.end + params.flank,
                                 flip = (chunk.strand == "-"))
             if params.scale:
-                mat += add/np.sum(add)
+                mat += add//np.sum(add)
             else:
                 mat += add
         except Exception as e:

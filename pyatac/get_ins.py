@@ -21,7 +21,7 @@ def _insHelperSmooth(arg):
     """Computes smoothed insertion track for a particular set of bed regions"""
     (chunk, args) = arg
     try:
-        offset = args.smooth / 2
+        offset = args.smooth // 2
         ins = InsertionTrack(chunk.chrom, chunk.start - offset, chunk.end + offset)
         ins.calculateInsertions( args.bam, lower = args.lower, upper = args.upper, atac = args.atac)
         ins.smooth_track(args.smooth, window = "gaussian", mode= 'valid')
@@ -71,7 +71,7 @@ def get_ins(args, bases = 50000, splitsize = 1000):
     if args.bed is None:
         chrs = read_chrom_sizes_from_bam(args.bam)
         chunks = ChunkList.convertChromSizes(chrs, splitsize = splitsize)
-        sets = chunks.split(items = bases/splitsize)
+        sets = chunks.split(items = bases//splitsize)
     else:
         chunks = ChunkList.read(args.bed)
         chunks.merge()

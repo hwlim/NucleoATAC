@@ -34,7 +34,7 @@ class VMat:
         self.mat = mat
         self.upper = upper
         self.lower = lower
-        self.w = mat.shape[1]/2
+        self.w = mat.shape[1]//2
     def trim(self,lower,upper,w):
         """reduce the size of the vplot
 
@@ -108,7 +108,7 @@ class VMat:
     def converto1d(self):
         """convert the 2d matrix to a 1d representation of insertions"""
         self.one_d = np.zeros(self.upper + self.upper%2 +2*self.w+1)
-        center = self.upper/2 + self.w
+        center = self.upper//2 + self.w
         for j in range(self.mat.shape[0]):
             for i in range(self.mat.shape[1]):
                 ilen=j+self.lower
@@ -145,7 +145,7 @@ class VMat:
     def plot_1d(self,filename=None):
         """plot the 1d insertion representation of the matrix"""
         fig = plt.figure()
-        xlim = len(self.one_d)/2
+        xlim = len(self.one_d)//2
         plt.plot(list(range(-xlim,xlim+1)),self.one_d)
         plt.vlines(-73,0,max(self.one_d)*1.1,linestyles='dashed')
         plt.vlines(73,0,max(self.one_d)*1.1,linestyles='dashed')

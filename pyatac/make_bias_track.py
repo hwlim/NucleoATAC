@@ -63,7 +63,7 @@ def make_bias_track(args, bases = 500000, splitsize = 1000):
     params = _BiasParams(args.fasta, args.pwm)
     if args.bed is None:
         chunks = ChunkList.convertChromSizes(params.chrs, splitsize = splitsize)
-        sets = chunks.split(items = bases/splitsize)
+        sets = chunks.split(items = bases//splitsize)
     else:
         chunks = ChunkList.read(args.bed)
         chunks.checkChroms(list(params.chrs.keys()))

@@ -74,12 +74,12 @@ class ChunkMat2D:
     def getIns(self):
         """Collape matrix into insertions.  Will reduce span on chromosome"""
         pattern = np.zeros((self.upper-self.lower,self.upper + (self.upper-1)%2))
-        mid = self.upper/2
+        mid = self.upper//2
         for i in range(self.lower,self.upper):
-            pattern[i-self.lower,mid+(i-1)/2]=1
-            pattern[i-self.lower,mid-(i/2)]=1
+            pattern[i-self.lower,mid+(i-1)//2]=1
+            pattern[i-self.lower,mid-(i//2)]=1
         ins = signal.correlate2d(self.mat,pattern,mode="valid")[0]
-        insertion_track = InsertionTrack(self.chrom,self.start + pattern.shape[1]/2, self.end - (pattern.shape[1]/2))
+        insertion_track = InsertionTrack(self.chrom,self.start + pattern.shape[1]//2, self.end - (pattern.shape[1]//2))
         insertion_track.assign_track(ins)
         return insertion_track
     def plot(self, filename = None, title = None, lower = None,
@@ -117,7 +117,7 @@ class FragmentMat2D(ChunkMat2D):
     def updateMat(self, fragment):
         row = fragment.insert - self.lower
         if self.mode == "centers":
-            col = (fragment.insert-1)/2 + fragment.left - self.start
+            col = (fragment.insert-1)//2 + fragment.left - self.start
             if col>=0 and col<self.ncol and row<self.nrow and row>=0:
                 self.mat[row, col] += 1
         else:

@@ -83,8 +83,8 @@ def run_occ(args):
     else:
         chrs = read_chrom_sizes_from_bam(args.bam)
     pwm = PWM.open(args.pwm)
-    chunks = ChunkList.read(args.bed, chromDict = chrs, min_offset = args.flank + args.upper/2 + max(pwm.up,pwm.down) + args.nuc_sep/2)
-    chunks.slop(chrs, up = args.nuc_sep/2, down = args.nuc_sep/2)
+    chunks = ChunkList.read(args.bed, chromDict = chrs, min_offset = args.flank + args.upper//2 + max(pwm.up,pwm.down) + args.nuc_sep//2)
+    chunks.slop(chrs, up = args.nuc_sep//2, down = args.nuc_sep//2)
     chunks.merge()
     maxQueueSize = args.cores*10
     fragment_dist = FragmentMixDistribution(0, upper = args.upper)

@@ -32,7 +32,7 @@ def _vplotHelper(arg):
             submat.makeFragmentMat(params.bam)
             add = submat.get(start = chunk.start- params.flank, end = chunk.end + params.flank, flip = (chunk.strand =="-"))
             if params.scale:
-                add = add/np.sum(add)
+                add = add//np.sum(add)
             result += add
         except Exception as e:
             print(('Caught exception when processing:\n'+  chunk.asBed()+"\n"))

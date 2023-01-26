@@ -190,7 +190,7 @@ class OccupancyParameters:
         if step%2 == 0:
             step = step - 1
         self.step = step
-        self.halfstep = (self.step-1) / 2
+        self.halfstep = (self.step-1) // 2
 
 class OccChunk(Chunk):
     """Class for calculating occupancy and occupancy peaks
@@ -209,8 +209,8 @@ class OccChunk(Chunk):
         self.bias_mat = BiasMat2D(self.chrom, self.start - self.params.flank,
                                  self.end + self.params.flank, 0, self.params.upper)
         if self.params.fasta is not None:
-            bias_track = InsertionBiasTrack(self.chrom, self.start - self.params.window - self.params.upper/2,
-                                  self.end + self.params.window + self.params.upper/2 + 1, log = True)
+            bias_track = InsertionBiasTrack(self.chrom, self.start - self.params.window - self.params.upper//2,
+                                  self.end + self.params.window + self.params.upper//2 + 1, log = True)
             bias_track.computeBias(self.params.fasta, self.params.chrs, self.params.pwm)
             self.bias_mat.makeBiasMat(bias_track)
     def calculateOcc(self):

@@ -41,6 +41,7 @@ class NucList(ChunkList):
             infile = open(bedfile,"r")
         out = NucList()
         for line in infile:
+            line = line.decode('utf-8')
             in_line = line.rstrip('\n').split("\t")
             start = int(in_line[1])
             end = int(in_line[2])

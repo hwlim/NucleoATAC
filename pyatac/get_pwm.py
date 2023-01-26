@@ -62,7 +62,7 @@ def get_pwm(args, bases = 50000, splitsize = 1000):
     chrs = read_chrom_sizes_from_fasta(args.fasta)
     if args.bed is None:
         chunks = ChunkList.convertChromSizes(chrs, splitsize = splitsize, offset = args.flank)
-        sets = chunks.split(items = bases/splitsize)
+        sets = chunks.split(items = bases//splitsize)
     else:
         chunks = ChunkList.read(args.bed, chromDict = chrs, min_offset = args.flank)
         sets = chunks.split(bases = bases)
@@ -77,18 +77,18 @@ def get_pwm(args, bases = 50000, splitsize = 1000):
     for i in tmp:
         result += i[0]
         n += i[1]
-    result /= n
+    result //= n
     if args.bed:
         normfreqs = seq.getNucFreqsFromChunkList(chunks, args.fasta, params.nucleotides)
     else:
         normfreqs = seq.getNucFreqs(args.fasta, params.nucleotides)
-    result = result / np.reshape(np.repeat(normfreqs,result.shape[1]),result.shape)
+    result = result // np.reshape(np.repeat(normfreqs,result.shape[1]),result.shape)
     if args.sym:
         #Symmetrize
         left = result[:,0:(args.flank + 1)]
         right = result[:,args.flank:]
         rightflipped = np.fliplr(np.flipud(right))
-        combined = (left + rightflipped) / 2
+        combined = (left + rightflipped) // 2
         result = np.hstack((combined, np.fliplr(np.flipud(combined[:,0:args.flank]))))
     #save
     pwm = PWM(result, args.flank, args.flank, params.nucleotides)

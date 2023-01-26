@@ -112,7 +112,7 @@ class InsertionBiasTrack(Track):
         else:
             ebias = self.vals
         smoothed = smooth(ebias,windowlen, window, norm = False)
-        flank = windowlen/2
+        flank = windowlen//2
         if self.log:
             self.vals = np.log(ebias[flank:-flank]/(smoothed-ebias[flank:-flank]))
         else:
