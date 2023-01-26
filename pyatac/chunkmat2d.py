@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from pyatac.tracks import InsertionTrack
 import pyximport; pyximport.install(setup_args={"include_dirs":np.get_include()})
-from fragments import makeFragmentMat
+from pyatac.fragments import makeFragmentMat
 
 class ChunkMat2D:
     """Class that stores fragments in 2D matrix according to
@@ -139,16 +139,16 @@ class BiasMat2D(ChunkMat2D):
         self.mat = np.ones(self.mat.shape)
     def makeBiasMat(self, bias_track):
         """Make 2D matrix representing sequence bias preferences"""
-        offset = self.upper/2
+        offset = self.upper//2
         bias = bias_track.get(self.start-offset,self.end+offset)
         if not bias_track.log:
             nonzero = np.where(bias !=0)[0]
             bias = np.log(bias + min(bias[nonzero]))
         pattern = np.zeros((self.upper-self.lower,self.upper + (self.upper-1)%2))
-        mid = self.upper/2
+        mid = self.upper//2
         for i in range(self.lower,self.upper):
-            pattern[i-self.lower,mid+(i-1)/2]=1
-            pattern[i-self.lower,mid-(i/2)]=1
+            pattern[i-self.lower,mid+(i-1)//2]=1
+            pattern[i-self.lower,mid-(i//2)]=1
         for i in range(self.upper-self.lower):
             self.mat[i]=np.exp(np.convolve(bias,pattern[i,:],mode='valid'))
     def normByInsertDist(self, insertsizes):
