@@ -44,7 +44,7 @@ class FragmentMixDistribution:
                 nz = x_mod > 0
             res[nz] = a * x_mod[nz]**(k-1) * np.exp(-x_mod[nz]/theta) / (theta **k * gamma(k))
             return res 
-        res_score = np.ones(boundaries[0]+1)*np.float('inf')
+        res_score = np.ones(boundaries[0]+1)*float('inf')
         res_param = [0 for i in range(boundaries[0]+1)]
         pranges = ((0.01,10),(0.01,150),(0.01,1))
         for i in range(15,boundaries[0]+1):
