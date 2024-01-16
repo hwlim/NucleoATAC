@@ -195,9 +195,22 @@ class InsertionTrack(Track):
         minus_sequence = complement(sequence)
         seq_mat = seq_to_mat(sequence, nucleotides)
         minus_seq_mat = seq_to_mat(minus_sequence, nucleotides)
+
+        ## if both self.plus and self.minus have at least one non-zero entry
         for i in range(self.length()):
-            mat += self.plus[i] * seq_mat[:,(offset + i - up):(offset + i + down + 1)]
-            mat += self.minus[i] * np.fliplr(minus_seq_mat[:,(offset + i - down):(offset + i + up + 1)])
+            
+            if (self.plus[i] == 0) and (self.minus[i] == 0):
+                continue
+
+            ## skip zero entries in the minus matrix
+            if self.minus[i] == 0:
+                mat += self.plus[i] * seq_mat[:,(offset + i - up):(offset + i + down + 1)]
+                continue
+
+            if self.plus[i] == 0:
+                mat += self.minus[i] * np.fliplr(minus_seq_mat[:,(offset + i - down):(offset + i + up + 1)])
+                continue
+
         return mat
 
 

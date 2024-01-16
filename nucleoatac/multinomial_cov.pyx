@@ -11,16 +11,16 @@ cimport numpy as np
 cimport cython
 
 
-DTYPE = np.float
-ctypedef np.float_t DTYPE_t
+DTYPE = float
+# ctypedef np.float_t DTYPE_t
 
 
 
 @cython.boundscheck(False)
-def calculateCov(np.ndarray[DTYPE_t, ndim=1] p, np.ndarray[DTYPE_t, ndim=1] v, int r):
+def calculateCov(np.ndarray[double, ndim=1] p, np.ndarray[double, ndim=1] v, int r):
     if p.shape[0]!= v.shape[0]:
         raise ValueError("p and v must be same shape")
-    cdef DTYPE_t value
+    cdef double value
     cdef unsigned int i, j
     for i in range(p.shape[0]):
         for j in range(i,p.shape[0]):

@@ -6,8 +6,8 @@ cimport cython
 from pysam.libcalignmentfile cimport AlignmentFile, AlignedSegment
 from pysam.libcfaidx cimport FastaFile
 
-DTYPE = np.float
-ctypedef np.float_t DTYPE_t
+DTYPE = float
+#ctypedef float_t double
 
 
 #### Import needed modules #####
@@ -17,7 +17,7 @@ ctypedef np.float_t DTYPE_t
 def makeFragmentMat(str bamfile, str chrom, int start, int end, int lower, int upper, int atac = 1):
     cdef int nrow = upper - lower
     cdef int ncol = end - start
-    cdef np.ndarray[DTYPE_t, ndim=2] mat = np.zeros( (nrow, ncol), dtype = DTYPE)
+    cdef np.ndarray[double, ndim=2] mat = np.zeros( (nrow, ncol), dtype = DTYPE)
     cdef AlignmentFile bamHandle = AlignmentFile(bamfile)
     cdef AlignedSegment read
     cdef int l_pos, ilen, row, col
@@ -33,7 +33,7 @@ def makeFragmentMat(str bamfile, str chrom, int start, int end, int lower, int u
                 l_pos = read.pos
                 ilen = abs(read.template_length)
             row = ilen - lower
-            col = (ilen-1)/2 + l_pos - start
+            col = (ilen-1)//2 + l_pos - start
             if col >= 0 and col < ncol and row < nrow and row >= 0:
                 mat[row, col] += 1
     bamHandle.close()
@@ -42,7 +42,7 @@ def makeFragmentMat(str bamfile, str chrom, int start, int end, int lower, int u
 @cython.boundscheck(False)
 def getInsertions(str bamfile, str chrom, int start, int end, int lower, int upper, int atac = 1):
     cdef int npos = end - start
-    cdef np.ndarray[DTYPE_t, ndim=1] mat = np.zeros(npos, dtype = DTYPE)
+    cdef np.ndarray[double, ndim=1] mat = np.zeros(npos, dtype = DTYPE)
     cdef AlignmentFile bamHandle = AlignmentFile(bamfile)
     cdef AlignedSegment read
     cdef int l_pos, ilen, r_pos
@@ -70,8 +70,8 @@ def getInsertions(str bamfile, str chrom, int start, int end, int lower, int upp
 @cython.boundscheck(False)
 def getStrandedInsertions(str bamfile, str chrom, int start, int end, int lower, int upper, int atac = 1):
     cdef int npos = end - start
-    cdef np.ndarray[DTYPE_t, ndim=1] matplus = np.zeros(npos, dtype = DTYPE)
-    cdef np.ndarray[DTYPE_t, ndim=1] matminus = np.zeros(npos, dtype = DTYPE)
+    cdef np.ndarray[double, ndim=1] matplus = np.zeros(npos, dtype = DTYPE)
+    cdef np.ndarray[double, ndim=1] matminus = np.zeros(npos, dtype = DTYPE)
     cdef AlignmentFile bamHandle = AlignmentFile(bamfile)
     cdef AlignedSegment read
     cdef int l_pos, ilen, r_pos
@@ -99,7 +99,7 @@ def getStrandedInsertions(str bamfile, str chrom, int start, int end, int lower,
 
 @cython.boundscheck(False)
 def getAllFragmentSizes(str bamfile, int lower, int upper, int atac = 1):
-    cdef np.ndarray[DTYPE_t, ndim =1] sizes = np.zeros(upper - lower, dtype= np.float)
+    cdef np.ndarray[double, ndim =1] sizes = np.zeros(upper - lower, dtype= float)
     # loop over samfile
     cdef AlignmentFile bamHandle = AlignmentFile(bamfile)
     cdef AlignedSegment read
@@ -121,7 +121,7 @@ def getAllFragmentSizes(str bamfile, int lower, int upper, int atac = 1):
 
 @cython.boundscheck(False)
 def getFragmentSizesFromChunkList(chunks, str bamfile, int lower, int upper, int atac = 1):
-    cdef np.ndarray[DTYPE_t, ndim =1] sizes = np.zeros(upper - lower, dtype= np.float)
+    cdef np.ndarray[double, ndim =1] sizes = np.zeros(upper - lower, dtype= float)
     # loop over samfile
     cdef AlignmentFile bamHandle = AlignmentFile(bamfile)
     cdef AlignedSegment read
@@ -138,7 +138,7 @@ def getFragmentSizesFromChunkList(chunks, str bamfile, int lower, int upper, int
                 else:
                     l_pos = read.pos
                     ilen = abs(read.template_length)
-                center = l_pos + (ilen-1)/2
+                center = l_pos + (ilen-1)//2
                 if ilen < upper and ilen >= lower and center >= chunk.start and center < chunk.end:
                     sizes[ilen - lower]+=1
     bamHandle.close()
