@@ -1,4 +1,5 @@
-Forked from GreenleafLab/NucleoATAC and converted to python3; yet to be tested.
+Forked from GreenleafLab/NucleoATAC and converted to python3
+Tested and minor-revised
 
 
 Below original README
